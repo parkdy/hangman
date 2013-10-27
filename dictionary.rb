@@ -2,6 +2,7 @@ class Dictionary
 	DEFAULT_FILE = 'dictionary.txt'
 
 	attr_accessor :words
+	
 	def initialize(file = DEFAULT_FILE)
 		@words = File.readlines(file).map(&:chomp)
 	end
