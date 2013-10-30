@@ -1,5 +1,4 @@
-# Repeatedly prompts user for valid input (which is passed in as a block)
-# Then returns the valid input
+# Repeatedly prompts user for valid input (tested in the passed block) and returns the input
 def prompt(prompt_message, error_message, &is_valid)
 	input = nil
 	invalid = true
