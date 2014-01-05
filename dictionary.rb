@@ -3,13 +3,16 @@ class Dictionary
 
 	attr_accessor :words
 	
+
 	def initialize(file = DEFAULT_FILE)
 		@words = File.readlines(file).map(&:chomp)
 	end
 
+
 	def self.only_letters?(word)
 		return (word =~ (/\A[a-zA-Z]+\z/)) ? true : false
 	end
+
 
 	def self.one_letter_off?(word1, word2)
 		if word1.length != word2.length

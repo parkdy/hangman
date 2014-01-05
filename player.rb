@@ -1,25 +1,31 @@
 class Player
 	attr_accessor :guesses
 	
+
 	def initialize
 		@guesses = []
 		@secret_length = nil
 	end
 
+
 	def secret_length
 		@secret_length
 	end
+
 
 	def make_guess
 		# Override in child to get rid of error
 		raise NotImplementedError.new("Player#make_guess not implemented!")
 	end
 
+
 	def locations_of_guess(guess)
 		# Override in child to get rid of error
 		raise NotImplementedError.new("Player#locations_of_guess not implemented!") 
 	end
 end
+
+
 
 class HumanPlayer < Player
 	def secret_length
@@ -29,6 +35,7 @@ class HumanPlayer < Player
 
 		@secret_length = input.to_i
 	end
+
 
 	def make_guess(known_string)
 		# Prompt user to guess a letter
@@ -43,6 +50,7 @@ class HumanPlayer < Player
 
 		guess
 	end
+
 
 	# Return locations of guessed letter in secret word
 	def locations_of_guess(guess)
@@ -79,6 +87,7 @@ class ComputerPlayer < Player
 		@secret_length = @secret_word.length
 	end
 
+
 	def make_guess(known_string)
 		regex = matching_regex(known_string)
 
@@ -102,6 +111,7 @@ class ComputerPlayer < Player
 		guess
 	end
 
+
 	def letter_frequency_hash(words)
 		freqs = Hash.new(0)
 		words.each do |word|
@@ -110,6 +120,7 @@ class ComputerPlayer < Player
 		
 		freqs
 	end
+
 
 	def locations_of_guess(guess)
 		locations = []
@@ -121,6 +132,7 @@ class ComputerPlayer < Player
 
 		locations
 	end
+	
 
 	def matching_regex(known_string)
 		regex_str = known_string.split('').map{ |chr| chr == '_' ? '.' : chr }.join('')

@@ -2,11 +2,14 @@ require './dictionary'
 require './prompt'
 require './player'
 
+
+
 class Hangman
 	def initialize
 		@players = []
 		@tries_remaining = 10
 	end
+
 
 	def play
 		puts "Welcome to Hangman!"
@@ -56,9 +59,11 @@ class Hangman
 		puts "Sorry, you lost!"
 	end
 
+
 	def game_won?(known_string)
 		!known_string.include?('_')
 	end
+
 
 	def get_players
 		# Prompt for number of human players
