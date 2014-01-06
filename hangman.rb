@@ -17,37 +17,19 @@ class Hangman
 		# Get human/computer players from input
 		@players = get_players
 
+		# Assign guesser and checker
 		guesser, checker = @players
 		
-		# Get length from player who made secret word
+		# Get length from player who made secret word (checker)
 		secret_length = checker.secret_length
 
 		# Known string is initially all unknown
 		known_string = "_" * secret_length
-		puts "\n#{known_string}   (#{secret_length} letters)\n"
+		puts "\n#{known_string}   (#{known_string.length} letters)\n"
 
 		until @tries_remaining == 0
-			puts "You have #{@tries_remaining} tries remaining."
-			puts "You already guessed: #{guesser.guesses.join(", ")}"
-
-			# The guessing player will make a guess
-			guess = guesser.make_guess(known_string)
-
-			# Find locations of guessed letter in secret word
-			locations = checker.locations_of_guess(guess)
-			if locations.any? 
-				# Correct guess
-				puts "You guessed '#{guess}' correctly!"
-				# Update display string
-				locations.each { |i| known_string[i] = guess }
-			else 
-				# Incorrect guess
-				puts "Sorry, you guessed '#{guess}' incorrectly!"
-
-				@tries_remaining -= 1
-			end
-
-			puts "#{known_string}   (#{secret_length} letters)\n\n"
+			# Make a guess and check it
+			play_round(known_string)
 
 			if game_won?(known_string)
 				puts "Congratulations, you guess the word #{known_string}!"
@@ -60,11 +42,6 @@ class Hangman
 	end
 
 
-	def game_won?(known_string)
-		!known_string.include?('_')
-	end
-
-
 	def get_players
 		# Prompt for number of human players
 		prompt_msg = "Enter number of human players (0-2): "
@@ -72,7 +49,7 @@ class Hangman
 		input = prompt(prompt_msg, error_msg) { |input| input.between?('0','2') }
 		num_humans = input.to_i
 
-		# Add appropriate number of humans and computers
+		# Create appropriate number of humans and computers
 		players = []
 		num_humans.times { players << HumanPlayer.new }
 		(2-num_humans).times { players << ComputerPlayer.new }
@@ -80,6 +57,37 @@ class Hangman
 		players
 	end
 
+
+	def play_round(known_string)
+		# Get guesser and checker
+		guesser, checker = @players
+
+		puts "You have #{@tries_remaining} tries remaining."
+		puts "You already guessed: #{guesser.guesses.join(", ")}"
+
+		# The guessing player will make a guess
+		guess = guesser.make_guess(known_string)
+
+		# Find locations of guessed letter in secret word
+		locations = checker.locations_of_guess(guess)
+		if locations.any? 
+			# Update display string
+			locations.each { |i| known_string[i] = guess }
+
+			puts "You guessed '#{guess}' correctly!"				
+		else 
+			@tries_remaining -= 1
+
+			puts "Sorry, you guessed '#{guess}' incorrectly!"
+		end
+
+		puts "#{known_string}   (#{known_string.length} letters)\n\n"
+	end
+
+
+	def game_won?(known_string)
+		!known_string.include?('_')
+	end
 end
 
 
